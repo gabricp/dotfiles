@@ -3,7 +3,8 @@
 .config/nvim/lazy-lock.json
 .config/nvim/lazy-lock.json.bak
 
-# Claude Code - excluir datos de sesión y caché
+# Claude Code - excluir datos de sesión, caché y secretos
+.claude/.credentials.json
 .claude/backups/
 .claude/cache/
 .claude/debug/
