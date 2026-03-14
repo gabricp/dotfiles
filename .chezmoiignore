@@ -1,0 +1,15 @@
+# Neovim - excluir caché y archivos generados
+.config/nvim/plugin/
+.config/nvim/lazy-lock.json
+.config/nvim/lazy-lock.json.bak
+
+# Claude Code - excluir datos de sesión y caché
+.claude/backups/
+.claude/cache/
+.claude/debug/
+.claude/todos/
+.claude/plugins/
+.claude/skills/
+
+# Tmux - excluir backup
+.config/tmux/tmux.conf.bak
