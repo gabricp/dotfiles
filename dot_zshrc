@@ -1,0 +1,75 @@
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/gabriel/.local/share/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/gabriel/.local/share/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/gabriel/.local/share/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/gabriel/.local/share/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+# Autocompletado
+autoload -Uz compinit && compinit
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'  # case-insensitive
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+setopt COMPLETE_IN_WORD    # completar desde cualquier posicion
+setopt AUTO_MENU           # menu automatico al segundo Tab
+setopt LIST_PACKED         # compactar lista de opciones
+
+# Historial
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE=~/.zsh_history
+setopt HIST_IGNORE_DUPS
+setopt SHARE_HISTORY
+
+# zsh-autosuggestions (sugerencias de historial en gris al escribir)
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'
+bindkey '^ ' autosuggest-accept  # Ctrl+Space para aceptar sugerencia
+
+# zsh-syntax-highlighting (rojo = comando invalido, verde = valido)
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+ZSH_HIGHLIGHT_STYLES[command]='fg=#98bb6c,bold'
+ZSH_HIGHLIGHT_STYLES[unknown-command]='fg=#e82424,bold'
+ZSH_HIGHLIGHT_STYLES[alias]='fg=#98bb6c,bold'
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=#98bb6c,bold'
+ZSH_HIGHLIGHT_STYLES[function]='fg=#98bb6c,bold'
+ZSH_HIGHLIGHT_STYLES[path]='fg=#7fb4ca'
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#e6c384'
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#e6c384'
+
+. "$HOME/.local/share/../bin/env"
+
+# Omarchy envs, aliases and functions (same as bash)
+source ~/.local/share/omarchy/default/bash/envs
+source ~/.local/share/omarchy/default/bash/aliases
+source ~/.local/share/omarchy/default/bash/functions
+
+# Tool initializations for zsh
+if command -v mise &> /dev/null; then
+  eval "$(mise activate zsh)"
+fi
+
+if command -v starship &> /dev/null; then
+  eval "$(starship init zsh)"
+fi
+
+if command -v zoxide &> /dev/null; then
+  eval "$(zoxide init zsh)"
+fi
+
+if command -v fzf &> /dev/null; then
+  { source /usr/share/fzf/completion.zsh } 2>/dev/null
+  { source /usr/share/fzf/key-bindings.zsh } 2>/dev/null
+fi
+
+# opencode
+export PATH=/home/gabriel/.opencode/bin:$PATH
