@@ -1,18 +1,16 @@
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/gabriel/.local/share/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
+# Conda
+if command -v conda >/dev/null 2>&1; then
+  __conda_setup="$(conda 'shell.zsh' 'hook' 2>/dev/null)"
+  if [ $? -eq 0 ]; then
     eval "$__conda_setup"
-else
-    if [ -f "/home/gabriel/.local/share/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/gabriel/.local/share/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/gabriel/.local/share/miniconda3/bin:$PATH"
-    fi
+  fi
+  unset __conda_setup
+elif [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
+  . "$HOME/miniconda3/etc/profile.d/conda.sh"
+elif [ -d "$HOME/miniconda3/bin" ]; then
+  export PATH="$HOME/miniconda3/bin:$PATH"
 fi
-unset __conda_setup
-# <<< conda initialize <<<
 
 # Autocompletado
 autoload -Uz compinit && compinit
@@ -31,27 +29,38 @@ setopt HIST_IGNORE_DUPS
 setopt SHARE_HISTORY
 
 # zsh-autosuggestions (sugerencias de historial en gris al escribir)
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'
-bindkey '^ ' autosuggest-accept  # Ctrl+Space para aceptar sugerencia
+if [ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
+  source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+  ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'
+  bindkey '^ ' autosuggest-accept  # Ctrl+Space para aceptar sugerencia
+fi
 
 # zsh-syntax-highlighting (rojo = comando invalido, verde = valido)
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-ZSH_HIGHLIGHT_STYLES[command]='fg=#98bb6c,bold'
-ZSH_HIGHLIGHT_STYLES[unknown-command]='fg=#e82424,bold'
-ZSH_HIGHLIGHT_STYLES[alias]='fg=#98bb6c,bold'
-ZSH_HIGHLIGHT_STYLES[builtin]='fg=#98bb6c,bold'
-ZSH_HIGHLIGHT_STYLES[function]='fg=#98bb6c,bold'
-ZSH_HIGHLIGHT_STYLES[path]='fg=#7fb4ca'
-ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#e6c384'
-ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#e6c384'
+if [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+  source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  ZSH_HIGHLIGHT_STYLES[command]='fg=#98bb6c,bold'
+  ZSH_HIGHLIGHT_STYLES[unknown-command]='fg=#e82424,bold'
+  ZSH_HIGHLIGHT_STYLES[alias]='fg=#98bb6c,bold'
+  ZSH_HIGHLIGHT_STYLES[builtin]='fg=#98bb6c,bold'
+  ZSH_HIGHLIGHT_STYLES[function]='fg=#98bb6c,bold'
+  ZSH_HIGHLIGHT_STYLES[path]='fg=#7fb4ca'
+  ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#e6c384'
+  ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#e6c384'
+fi
 
-. "$HOME/.local/share/../bin/env"
+if [ -f "$HOME/.local/bin/env" ]; then
+  . "$HOME/.local/bin/env"
+fi
 
 # Omarchy envs, aliases and functions (same as bash)
-source ~/.local/share/omarchy/default/bash/envs
-source ~/.local/share/omarchy/default/bash/aliases
-source ~/.local/share/omarchy/default/bash/functions
+for omarchy_file in \
+  "$HOME/.local/share/omarchy/default/bash/envs" \
+  "$HOME/.local/share/omarchy/default/bash/aliases" \
+  "$HOME/.local/share/omarchy/default/bash/functions"
+do
+  [ -f "$omarchy_file" ] && source "$omarchy_file"
+done
+unset omarchy_file
 
 # Tool initializations for zsh
 if command -v mise &> /dev/null; then
@@ -72,4 +81,4 @@ if command -v fzf &> /dev/null; then
 fi
 
 # opencode
-export PATH=/home/gabriel/.opencode/bin:$PATH
+export PATH="$HOME/.opencode/bin:$PATH"
